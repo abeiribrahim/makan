@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained('categories')->onDelete('restrict');
             $table->string('price');
+            $table->string('title');
             $table->string('bathn');
             $table->string('bedn');
             $table->string('area');

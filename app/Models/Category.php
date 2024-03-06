@@ -12,4 +12,8 @@ class Category extends Model
         'cat_name',
 
         ];
+        public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
 }

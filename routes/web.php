@@ -20,16 +20,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
-Route::get('property-list',[PropertyController::class,'index'])->name('property-list');
+
+Route::get('/',[CategoryController::class,'index'])->name('index');
+Route::get('property-list',[PropertyController::class,'properties'])->name('property-list');
 Route::get('admin.propertylist',[PropertyController::class,'propertylist'])->name('admin.propertylist');
 Route::get('addproperty',[PropertyController::class,'create'])->name('addproperty');
 Route::get('admin.editproperty/{id}',[PropertyController::class,'edit'])->name('admin.editproperty');
 Route::put('updateproperty/{id}',[PropertyController::class,'update'])->name('updateproperty');
 Route::post('storeproperty',[PropertyController::class,'store'])->name('storeproperty');
 Route::get('admin.deleteproperty/{id}',[PropertyController::class,'destroy'])->name('admin.deleteproperty');
+Route::get('forsell',[PropertyController::class,'getForSellProperties'])->name('forsell');
+Route::get('forrent',[PropertyController::class,'getForRentProperties'])->name('forrent');
+Route::get('searchresult',[PropertyController::class,'searchProperties'])->name('searchresult');
+Route::get('about',[PropertyController::class,'about'])->name('about');
 //Route::get('admin.addcategory',[CategoryController::class,'create'])->name('admin.addcategory');
 //Route::post('storecat',[CategoryController::class,'store'])->name('storecat');
 
@@ -41,7 +44,7 @@ Route::put('admin.updatetestimonial/{id}',[TestimonialController::class,'update'
 Route::post('storetestimonial',[TestimonialController::class,'store'])->name('storetestimonial');
 Route::get('admin.deletetestimonial/{id}',[TestimonialController::class,'destroy'])->name('admin.deletetestimonial');
 // categories
-Route::get('property-type',[CategoryController::class,'index'])->name('property-type');
+Route::get('property-type',[CategoryController::class,'showCategories'])->name('property-type');
 Route::get('admin.categories',[CategoryController::class,'propertytype'])->name('admin.categories');
 Route::get('admin.addcategory',[CategoryController::class,'create'])->name('admin.addcategory');
 Route::get('editcategory/{id}',[CategoryController::class,'edit'])->name('editcategory');

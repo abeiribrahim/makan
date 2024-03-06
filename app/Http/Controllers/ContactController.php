@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Contact;
+use App\Models\Category;
+use App\Models\Property;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Mail;
@@ -34,13 +36,15 @@ class contactController extends Controller
         ]);
     
         // Create a new contact record
+        $locations = Property::distinct()->pluck('location');
+        $categories=Category::get();
         Contact::create($data);
     
         // Send email using the MakaanMail Mailable class
         Mail::to('abeir@gmail.com')->send(new MakaanMail($data));
     
         // Return the view (if needed)
-        return view('contact');
+        return view('contact',compact('categories','locations'));
     }
     
      public function showA(string $id)
@@ -61,14 +65,20 @@ class contactController extends Controller
      
          return view('admin.messages', compact('latestMessages', 'unreadCount'));
      }
+
      public function contact()
-    {   $contacts=Contact::get();
-        return view('contact', compact('contacts'));
+
+    {   
+        $locations = Property::distinct()->pluck('location');
+        $categories=Category::get();
+        $contacts=Contact::get();
+        return view('contact', compact('contacts','categories','locations'));
     }
     public function create()
     {
         $contacts=Contact::get();
-        return view('contact', compact('contacts'));
+        $categories=Category::get();
+        return view('contact', compact('contacts','categories'));
 
     }
 
@@ -139,7 +149,7 @@ class contactController extends Controller
     {
         contact::where('id',$id)->delete();
         
-        return redirect('admin/contacts');
+        return redirect('admin.contacts');
     }
    // public function showmsg(string $id)
   //  {

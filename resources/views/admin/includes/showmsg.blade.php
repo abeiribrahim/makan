@@ -1,6 +1,6 @@
 
         <!-- page content -->
-        <form action="{{route('showmsg', $messages->id)}}" method="post">
+        <form action="{{route('admin.showmsg', $contacts->id)}}" method="post">
     @csrf
         <div class="right_col" role="main">
           <div class="">
@@ -27,12 +27,12 @@
               <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
               
-                  <h2>Full Name:{{ $messages->fname}}</h2>
+                  <h2>Full Name:{{ $contacts->fname}}</h2>
                   <br>
-                  <h2>Email:{{$messages->email}}</h2>
+                  <h2>Email:{{$contacts->email}}</h2>
                    <br>
                   <h2>Message Content:</h2>
-                  <p>{{$messages->message}}.</p>
+                  <p>{{$contacts->message}}.</p>
                 </div>
               </div>
             </div>

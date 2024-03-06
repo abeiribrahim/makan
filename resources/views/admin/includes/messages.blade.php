@@ -61,9 +61,9 @@
         <tr>
             <td>{{$contact->fname}}.{{$contact->subject}}</td>
             <td>{{$contact->email}}</td>
-            <td><a href="{{ route('showmsg',['id'=>$contact->id])}}">
+            <td><a href="{{ route('admin.showmsg',['id'=>$contact->id])}}">
                 <img src="{{asset('adminassets/./images/edit.png')}}" alt="Edit"></a></td>
-            <td><a href="{{ route('deletemessage',['id'=>$contact->id])}}">
+            <td><a href="{{ route('admin.deletemessage',['id'=>$contact->id])}}">
                 <img src="{{asset('adminassets/./images/delete.png')}}" alt="Delete"></a></td>
         </tr>
     @endforeach

@@ -13,12 +13,47 @@ class PropertyController extends Controller
      * Display a listing of the resource.
      */
     use Common;
-    public function index()
-    {  
-        $categories=Category::get();
-        $properties= Property::get();
-        return view('property-list',compact('properties','categories'));
+    // users page
+    public function index(Request $request)
+    {
+        // Retrieve input values
+        $keyword = $request->input('keyword');
+        $selectedLocation = $request->input('location'); // Renamed to avoid conflict
+    
+        // Retrieve distinct locations from the properties table
+        $locations = Property::distinct()->pluck('location');
+    
+        // Retrieve categories
+        $categories = Category::get();
+    
+        // Construct the base query to fetch properties
+        $query = Property::query();
+    
+        // Apply keyword filter
+        if ($keyword) {
+            $query->where('title', 'like', "%$keyword%");
+        }
+    
+        // Apply category filter
+        $catName = $request->input('category_id');
+        if ($catName) {
+            $query->where('category_id', $catName);
+        }
+    
+        // Apply location filter
+        if ($selectedLocation) {
+            $query->where('location', $selectedLocation);
+        }
+    
+        // Fetch properties based on the search criteria
+        $properties = $query->get();
+        $testimonials= Testimonial::get();
+        // Pass data to the index view
+        return view('index', compact('properties', 'categories', 'locations', 'selectedLocation'));
     }
+
+
+    //Admins only
     public function propertylist()
     {  
         $contacts =Contact::with('user')->get();
@@ -28,16 +63,27 @@ class PropertyController extends Controller
        
         return view('admin.propertylist',compact('properties','categories','contacts'));
     }
+    public function about()
+    {  
+        $locations =Property::distinct()->pluck('location');
+        $categories=Category::get();
+       
+        $properties=Property::get();
+        $categories =Category::get();
+        
+       
+        return view('about',compact('properties','categories','locations'));
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-
+        $locations =Property::distinct()->pluck('location');
         $categories=Category::get();
         $properties= Property::get();
-        return view('addproperty',compact('properties','categories'));
+        return view('addproperty',compact('properties','categories','locations'));
     }
 
     /**
@@ -49,6 +95,7 @@ class PropertyController extends Controller
     $data = $request->validate([
         'category_id' => 'required|string|max:50',
         'price' => 'required|string|max:100',
+        'title'=> 'required|string|max:100',
         'bedn' => 'required|string|max:50',
         'bathn' => 'required|string|max:50',
         'area' => 'required|string|max:50',
@@ -84,9 +131,39 @@ class PropertyController extends Controller
     /**
      * Display the specified resource.
      */
+    public function getForSellProperties() {
+        $locations = Property::distinct()->pluck('location');
+        $categories=Category::get();
+        $properties = Property::where('sell', 1)->get();
+        return view('forsell',compact('properties','categories', 'locations'));
+        
+        
+    }
+    
+    public function getForRentProperties() {
+        $locations = Property::distinct()->pluck('location');
+        $categories = Category::get();
+        $properties = Property::where('rent', 1)->get();
+        return view('forrent', compact('properties', 'categories', 'locations'));
+    }
+    
+    public function properties(Request $request)
+    {   
+        $keyword = $request->input('keyword');
+        $selectedLocation = $request->input('location');
+        $locations = Property::distinct()->pluck('location');
+            $categories=Category::get();
+            $properties=Property::get();
+            return view('property-list',compact('properties','categories', 'locations'));
+        
+    }
     public function show(string $id)
     {
-        //
+        $locations = Property::distinct()->pluck('location');
+            $categories=Category::get();
+            $properties=Property::get();
+            return view('property-list',compact('properties','categories'));
+        
     }
 
     /**
@@ -114,6 +191,7 @@ class PropertyController extends Controller
     $data = $request->validate([
         'category_id' => 'required|string|max:50',
         'price' => 'required|string|max:100',
+        'title'=> 'required|string|max:100',
         'bedn' => 'required|string|max:50',
         'bathn' => 'required|string|max:50',
         'area' => 'required|string|max:50',
@@ -155,4 +233,45 @@ class PropertyController extends Controller
         
         return redirect('admin.propertylist');
     }
+    public function searchProperties(Request $request)
+{
+    // Retrieve input values
+    $searchTerm = $request->input('search');
+    $keyword = $request->input('keyword');
+    $selectedLocation = $request->input('location'); // Renamed to avoid conflict
+
+    // Retrieve distinct locations from the properties table
+    $locations = Property::distinct()->pluck('location');
+
+    // Retrieve categories
+    $categories = Category::get();
+
+    // Construct the base query to fetch properties
+    $query = Property::query();
+
+    // Apply keyword filter
+    if ($keyword) {
+        $query->where('title', 'like', "%$keyword%");
+    }
+
+    // Apply category filter
+    $catName = $request->input('category_id');
+    if ($catName) {
+        $query->where('category_id', $catName);
+    }
+
+    // Apply location filter
+    if ($selectedLocation) {
+        $query->where('location', $selectedLocation);
+    }
+
+    // Fetch properties based on the search criteria
+    $properties = $query->get();
+
+    // Pass data to the index view
+    return view('searchresult', compact('properties', 'categories', 'locations', 'selectedLocation'));
+}
+
+    
+
 }

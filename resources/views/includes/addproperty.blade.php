@@ -40,6 +40,12 @@
                                 </div>
                             </div>
                             <div class="item form-group">
+                                <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">Title <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 ">
+                                    <input id="title" class="form-control" type="text" name="title" required="required">
+                                </div>
+                            </div>
+                            <div class="item form-group">
                                 <label for="location" class="col-form-label col-md-3 col-sm-3 label-align">Location <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 ">
                                     <input id="location" class="form-control" type="text" name="location" required="required">

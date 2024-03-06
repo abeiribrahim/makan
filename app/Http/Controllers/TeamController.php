@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Contact;
+use App\Models\Category;
+
+use App\Models\Property;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use App\Traits\Common;
@@ -21,8 +24,11 @@ class TeamController extends Controller
     }
     public function propertyagent()
     {
+        $locations =Property::distinct()->pluck('location');
+        $categories=Category::get();
+        $properties= Property::get();
         $teams= Team::get();
-        return view('property-agent',compact('teams'));
+        return view('property-agent',compact('teams','categories','locations','properties'));
         
     }
 

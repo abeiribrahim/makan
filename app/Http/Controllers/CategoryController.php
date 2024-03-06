@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Contact;
+use App\Models\Testimonial;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,16 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $contacts =Contact::with('user')->get();
-        $categories = Category::get();
-        return view('property-type', compact('categories','contacts'));
-    }
+{
+   
+    $properties= Property::get();
+    $locations = Property::distinct()->pluck('location');
+    $categories = Category::get();
+    $testimonials= Testimonial::get();
+    return view('index', compact('properties', 'categories', 'locations','testimonials'));
+}
+
+    
     public function propertytype()
     {
         $contacts =Contact::with('user')->get();
@@ -88,21 +94,14 @@ class CategoryController extends Controller
         
         return redirect('admin.categories');
     }
-    /*public function showCategories()
+    public function showCategories()
     {
-        // Retrieve all categories
-        $categories = Category::all();
+        $locations = Property::distinct()->pluck('location');
+        // Retrieve all categories with property counts using eager loading
+        $categories = Category::withCount('properties')->get();
     
-        // Create an associative array to store category names and their corresponding car counts
-        $categoryCarCounts = [];
+        // Pass the categories and their property counts to the view
+        return view('property-type', compact('categories','locations'));
+    }
     
-        // Loop through each category to count the number of cars it contains
-        foreach ($categories as $category) {
-            $carCount = Car::where('category_id', $category->id)->count();
-            $categoryCarCounts[$category->cat_name] = $carCount;
-        }
-    
-        // Pass the categories and their car counts to the view
-        return view('single', compact('categoryCarCounts'));
-    }*/
 }
